@@ -16,7 +16,13 @@ class UserManager(BaseUserManager):
             return user
 
     def create_user(self, email, password, is_staff=False, is_superuser=True, is_active=True, **extra_fields):
-        return self.create_user(self, email, password, is_staff, is_superuser, is_active, **extra_fields)
+        email = UserManager.normalize_email(email)
+        user = self.model(email=email, is_staff=is_staff, is_superuser=is_superuser, is_active=is_active,
+                          **extra_fields)
+        if password:
+            user.set_password(password)
+        user.save()
+        return user
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=100, blank=False, null=False, unique=True)
