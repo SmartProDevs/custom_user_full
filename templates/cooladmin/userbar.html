@@ -29,7 +29,14 @@
                                     <div class="account-dropdown__body">
                                         <div class="account-dropdown__item">
                                             <a href="#">
-                                                <i class="zmdi zmdi-account"></i>Account</a>
+                                                <i class="zmdi zmdi-account"></i>
+                                                {% if user.user_type == 1%}superadmin
+                                                {% elif user.user_type == 2%}adminstrator
+                                                {% elif user.user_type == 3%}editor
+                                                {% elif user.user_type == 4%}contributor
+                                                {% elif user.user_type == 5%}subscriper
+                                                {% endif %}
+                                            </a>
                                         </div>
                                         <div class="account-dropdown__item">
                                             <a href="#">

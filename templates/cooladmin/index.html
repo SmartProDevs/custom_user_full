@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'cooladmin/base.html' %}
 {% load static %}
 {% load humanize %}
 {% block content %}
 <div class="page-container">
-    {%include 'userbar.html'%}
+    {%include 'cooladmin/userbar.html'%}
     <!-- HEADER DESKTOP-->
 
     <!-- MAIN CONTENT-->
@@ -27,8 +27,8 @@
                                         <i class="fa fa-user"></i>
                                     </div>
                                     <div class="text">
-                                        <h2>{{ counts.authors | intcomma}}</h2>
-                                        <span>Caunt of Authors</span>
+                                        <h2>{{counts.user_count}}</h2>
+                                        <span>Count of Users</span>
                                     </div>
                                 </div>
                                 <div class="overview-chart">
@@ -55,8 +55,13 @@
                                         <i class="fa fa-list-alt"></i>
                                     </div>
                                     <div class="text">
-                                        <h2>{{ counts.categories | intcomma }}</h2>
-                                        <span>Count of Categories</span>
+                                        {% if user.user_type == 1%}<h3 style="color:white">You are superadmin</h3>
+                                        {% elif user.user_type == 2%}<h3 style="color:white">You are adminstrator</h3>
+                                        {% elif user.user_type == 3%}<h3 style="color:white">You are editor</h3>
+                                        {% elif user.user_type == 4%}<h3 style="color:white">You are contributor</h3>
+                                        {% elif user.user_type == 5%}<h3 style="color:white">You are subscriper</h3>
+                                        {% endif %}
+
                                     </div>
                                 </div>
                                 <div class="overview-chart">
@@ -75,45 +80,54 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="overview-item overview-item--c3">
-                            <div class="overview__inner">
-                                <div class="overview-box clearfix">
-                                    <div class="icon">
-                                        <i class="fa fa-book"></i>
-                                    </div>
-                                    <div class="text">
-                                        <h2>{{ counts.books | intcomma }}</h2>
-                                        <span>Count of Books</span>
-                                    </div>
-                                </div>
-                                <div class="overview-chart">
-                                    <div class="chartjs-size-monitor"
-                                         style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                                        <div class="chartjs-size-monitor-expand"
-                                             style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                            <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
-                                        </div>
-                                        <div class="chartjs-size-monitor-shrink"
-                                             style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                            <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                </div>
+                {% if user.user_type == 1%}
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- DATA TABLE-->
+                        <div class="table-responsive m-b-40">
+                            <table class="table table-borderless table-data3">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Full name</th>
+
+                                    <th>email</th>
+                                    <th>Date joined</th>
+                                    <th>User type</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for us in users %}
+                                <tr>
+                                    <td>{{ us.id }}</td>
+                                    <td>{{us.full_name}}</td>
+
+                                    <td>{{ us.email }}</td>
+                                    <td>{{ us.date_joined }}</td>
+                                    <td>
+                                         {% if us.user_type == 1%}superadmin
+                                        {% elif us.user_type == 2%}adminstrator
+                                        {% elif us.user_type == 3%}editor
+                                        {% elif us.user_type == 4%}contributor
+                                        {% elif us.user_type == 5%}subscriper
+                                        {% endif %}
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
+                        <!-- END DATA TABLE-->
                     </div>
                 </div>
-                <div>
-                    <div class="col-lg-12">
-                        <div class="au-card m-b-30">
-                            <div class="au-card-inner">
-                                <h3 class="title-2 m-b-40">Single Bar Chart</h3>
-                                <canvas id="CategoryBarChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <a class="au-btn au-btn-icon au-btn--blue" href="{% url 'create_user' %}">
+                    <i class="zmdi zmdi-plus"></i>add user</a>
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -175,6 +189,8 @@
     console.log(error);
   }
 })(jQuery);
+
+
 </script>
 {% endblock%}
 

@@ -37,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         (4, 'contributor'),
         (5, 'subscriber'),
     )
-    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
+    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=1)
 
     USERNAME_FIELD = "email"
     objects = UserManager()
